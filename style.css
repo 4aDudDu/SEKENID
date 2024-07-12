@@ -259,35 +259,14 @@ svg {
   margin-bottom: 20px;
 }
 
-.wrapper {
-  --input-focus: #2d8cf0;
-  --font-color: #323232;
-  --font-color-sub: #666;
-  --bg-color: #fff;
-  --bg-color-alt: #666;
-  --main-color: #323232;
-  justify-content: center;
-  margin: 0 auto;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  animation-fill-mode: forwards;
-}
-
 .wrapper.show {
-  display: block;
+  display: inline-block;
   animation: fadeIn 0.5s forwards;
 }
 
 .wrapper.hide {
   animation: fadeOut 0.5s forwards;
 }
-
 
 .switch {
   transform: translateY(-200px);
@@ -303,7 +282,7 @@ svg {
 
 .card-side::before {
   position: absolute;
-  content: 'Log in';
+  content: "Log in";
   left: -70px;
   top: 0;
   width: 100px;
@@ -314,7 +293,7 @@ svg {
 
 .card-side::after {
   position: absolute;
-  content: 'Sign up';
+  content: "Sign up";
   left: 70px;
   top: 0;
   width: 100px;
@@ -373,7 +352,7 @@ svg {
 
 .toggle:checked ~ .card-side:after {
   text-decoration: underline;
-} 
+}
 
 .flip-card__inner {
   width: 300px;
@@ -394,7 +373,8 @@ svg {
   box-shadow: none;
 }
 
-.flip-card__front, .flip-card__back {
+.flip-card__front,
+.flip-card__back {
   padding: 20px;
   position: absolute;
   display: flex;
@@ -452,7 +432,8 @@ svg {
   border: 2px solid var(--input-focus);
 }
 
-.flip-card__btn:active, .button-confirm:active {
+.flip-card__btn:active,
+.button-confirm:active {
   box-shadow: 0px 0px var(--main-color);
   transform: translate(3px, 3px);
 }
@@ -469,7 +450,22 @@ svg {
   font-weight: 600;
   color: var(--font-color);
   cursor: pointer;
-} 
+}
+
+.wrapper {
+  display: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300%;
+  height: 200%;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
 
 @keyframes fadeIn {
   from {
