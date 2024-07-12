@@ -10,36 +10,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_product'])) {
-    $namabarang = $_POST['namabarang'];
-    $harga = $_POST['harga'];
-    $created_date = date('Y-m-d');
-    $kategori = $_POST['kategori'];
-    $jenis = $_POST['jenis'];
-    $foto = $_FILES['foto']['name'];
-    $target_dir = "uploads/";
-    $target_file = $target_dir . basename($foto);
+$selected_category = isset($_POST['category']) ? $_POST['category'] : '';
 
-    // Upload file
-    if (move_uploaded_file($_FILES['foto']['tmp_name'], $target_file)) {
-        // Use prepared statements to prevent SQL injection
-        $stmt = $conn->prepare("INSERT INTO produk (namabarang, harga, created_date, kategori, jenis, foto) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssss", $namabarang, $harga, $created_date, $kategori, $jenis, $target_file);
-
-        if ($stmt->execute()) {
-            echo "<script>alert('Produk berhasil ditambahkan.'); window.location.href='index.php';</script>";
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-
-        $stmt->close();
-    } else {
-        echo "Error uploading file.";
-    }
+// Adjust SQL query based on selected category
+if ($selected_category) {
+    $stmt = $conn->prepare("SELECT * FROM produk WHERE kategori = ?");
+    $stmt->bind_param("s", $selected_category);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    $sql = "SELECT * FROM produk";
+    $result = $conn->query($sql);
 }
-
-$sql = "SELECT * FROM produk";
-$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -93,17 +75,26 @@ $result = $conn->query($sql);
                             class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Dashboard</a>
                     </li>
                     <li>
-                        <a href="#"
-                            class="dropdown-toggle block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                            role="button" data-bs-toggle="dropdown" aria-expanded="false">Kategori</a>
-                        <ul class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Kendaraan</a>
-                            <a class="dropdown-item" href="#">Pakaian</a>
-                            <a class="dropdown-item" href="#">Elektronik</a>
-                            <a class="dropdown-item" href="#">Tanah dan Bangunan</a>
-                            <a class="dropdown-item" href="#">Mainan Anak - Anak</a>
-                            <a class="dropdown-item" href="#">Perabotan</a>
-                        </ul>
+                        <form method="POST" action="index.php">
+                            <div class="dropdown">
+                                <a class="dropdown-toggle block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">Kategori</a>
+                                <ul class="dropdown-menu">
+                                    <li><button class="dropdown-item" type="submit" name="category"
+                                            value="Kendaraan">Kendaraan</button></li>
+                                    <li><button class="dropdown-item" type="submit" name="category"
+                                            value="Pakaian">Pakaian</button></li>
+                                    <li><button class="dropdown-item" type="submit" name="category"
+                                            value="Elektronik">Elektronik</button></li>
+                                    <li><button class="dropdown-item" type="submit" name="category"
+                                            value="Tanah dan Bangunan">Tanah dan Bangunan</button></li>
+                                    <li><button class="dropdown-item" type="submit" name="category"
+                                            value="Mainan Anak - Anak">Mainan Anak - Anak</button></li>
+                                    <li><button class="dropdown-item" type="submit" name="category"
+                                            value="Perabotan">Perabotan</button></li>
+                                </ul>
+                            </div>
+                        </form>
                     </li>
                     <li>
                         <a href="laporan.php"
@@ -147,19 +138,10 @@ $result = $conn->query($sql);
 
         <!-- jual tombol -->
         <?php if ($is_logged_in): ?>
-            <button class="btnsell">
-                <img src="assets/jualbrg.png" alt="" id="sell-btn" />
+            <button class="btnsell" onclick="window.location.href='jual.php'">
+                <img src="assets/jualbrg.png" alt="" />
             </button>
         <?php endif; ?>
-
-    </div>
-
-    <!-- jual tombol -->
-    <?php if ($is_logged_in): ?>
-        <button class="btnsell" onclick="window.location.href='jual.php'">
-            <img src="assets/jualbrg.png" alt="" />
-        </button>
-    <?php endif; ?>
     </div>
 
     <footer class="bg-white-800 text-black text-center py-4">

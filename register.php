@@ -16,18 +16,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGISTER</title>
+    <link rel="stylesheet" href="style2.css">
+    <link rel="website icon" type="png" href="assets/sekenid.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h2>Register</h2>
-    <form method="POST" action="">
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username" required><br>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password" required><br><br>
-        <input type="submit" value="Register">
-    </form>
-    <p>Sudah punya akun? <a href="login.php">Login di sini</a></p>
+
+<body class="flex flex-col h-screen justify-between">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h3>Register</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="">
+                            <div class="form-group">
+                                <label for="username">Username:</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <div class="form-group text-center">
+                                <input type="submit" class="btn btn-primary" value="Register">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center">
+                        <p>Sudah punya akun? <a href="login.php">Login di sini</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </body>
+
 </html>
