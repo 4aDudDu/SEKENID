@@ -27,36 +27,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body class="flex flex-col h-screen justify-between">
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h3>Register</h3>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST" action="">
-                            <div class="form-group">
-                                <label for="username">Username:</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password:</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                            </div>
-                            <div class="form-group text-center">
-                                <input type="submit" class="btn btn-primary" value="Register">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="card-footer text-center">
-                        <p>Sudah punya akun? <a href="login.php">Login di sini</a></p>
+
+    <div class="container">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h3>Register</h3>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" action="">
+                                <div class="form-group">
+                                    <label for="username">Username:</label>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password:</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                                <div class="form-group text-center">
+                                    <input type="submit" class="btn btn-primary" value="Register">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer text-center">
+                            <p>Sudah punya akun? <a href="login.php">Login di sini</a></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
 </body>
 
 </html>
