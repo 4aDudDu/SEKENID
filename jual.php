@@ -111,6 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_product'])) {
             </div>
         </div>
     </nav>
+    
     <div class="container">
         <h1>Tambah Produk</h1>
         <form method="POST" enctype="multipart/form-data" action="jual.php">

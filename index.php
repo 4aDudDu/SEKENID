@@ -1,7 +1,7 @@
 <?php
 include 'koneksi.php';
 session_start();
-$is_logged_in = isset($_SESSION['username']);
+$is_logged_in = isset($_SESSION['username']); // Periksa apakah pengguna sudah login
 
 // Handle logout
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
