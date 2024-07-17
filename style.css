@@ -121,33 +121,39 @@
   }
 }
 
+/* Updated card styles */
 .card {
-  flex: 0 0 auto;
+  flex: 1 1 calc(25% - 40px);
+  /* Adjusted flex-basis to fit four cards in a row */
   margin: 10px;
-  width: 250px;
+  max-width: calc(25% - 40px);
+  /* Ensures maximum width matches the flex-basis */
   border: 1px solid #ccc;
   border-radius: 5px;
-  height: 254px;
+  height: 300px;
+  /* Height for better visual */
   padding: 15px;
   box-sizing: border-box;
   background: #f5f5f5;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
+  /* Hidden overflow for better layout */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
 .card-img {
   background-color: #ffcaa6;
-  height: auto;
+  height: 150px;
+  /* Adjusted height */
   object-fit: cover;
-  width: 50%;
+  width: 100%;
+  /* Full width */
   border-radius: 0.5rem;
   transition: 0.3s ease;
-  max-width: 100%;
 }
 
 .card-info {
-  padding-top: 10px 0;
+  padding-top: 10px;
   margin-top: 10px;
 }
 
@@ -251,12 +257,18 @@ svg {
   color: aliceblue;
 }
 
+/* Ensures that the cards wrap and fill the container */
 .cards-container {
   display: flex;
-  flex-wrap: nowrap; 
-  justify-content: flex-start; 
-  overflow-x: auto; 
+  flex-wrap: wrap;
+  /* Allows wrapping */
+  justify-content: flex-start;
+  /* Align cards to the start */
+  gap: 20px;
+  /* Space between cards */
   margin-bottom: 20px;
+  padding: 10px;
+  /* Padding to add space inside the container */
 }
 
 .wrapper.show {
@@ -338,19 +350,19 @@ svg {
   transition: 0.3s;
 }
 
-.toggle:checked + .slider {
+.toggle:checked+.slider {
   background-color: var(--input-focus);
 }
 
-.toggle:checked + .slider:before {
+.toggle:checked+.slider:before {
   transform: translateX(30px);
 }
 
-.toggle:checked ~ .card-side:before {
+.toggle:checked~.card-side:before {
   text-decoration: none;
 }
 
-.toggle:checked ~ .card-side:after {
+.toggle:checked~.card-side:after {
   text-decoration: underline;
 }
 
@@ -365,11 +377,11 @@ svg {
   transform-style: preserve-3d;
 }
 
-.toggle:checked ~ .flip-card__inner {
+.toggle:checked~.flip-card__inner {
   transform: rotateY(180deg);
 }
 
-.toggle:checked ~ .flip-card__front {
+.toggle:checked~.flip-card__front {
   box-shadow: none;
 }
 
@@ -469,19 +481,21 @@ svg {
 
 @keyframes fadeIn {
   from {
-      opacity: 0;
+    opacity: 0;
   }
+
   to {
-      opacity: 1;
+    opacity: 1;
   }
 }
 
 @keyframes fadeOut {
   from {
-      opacity: 1;
+    opacity: 1;
   }
+
   to {
-      opacity: 0;
+    opacity: 0;
   }
 }
 
@@ -504,4 +518,3 @@ svg {
   border-radius: 10px;
   margin-top: 10px;
 }
-

@@ -126,7 +126,7 @@ if ($selected_category) {
                     echo "</div>";
                     echo "<div class='card-footer'>";
                     echo "<span class='text-title'>Rp. " . number_format($row['harga'], 0, ',', '.') . "</span>";
-                    echo "<button class='btn-beli'>Beli</button>";
+                    echo "<button class='btn-beli' onclick=\"window.location.href='produk.php?id=" . $row['id'] . "'\">Beli</button>";
                     echo "</div>";
                     echo "</div>";
                 }
