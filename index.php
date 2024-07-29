@@ -184,12 +184,12 @@ if ($selected_category) {
                     echo "<button class='btn-beli' onclick=\"window.location.href='beli.php?id=" . $row['id'] . "'\">Beli</button>";
                     echo "<form method='POST' action='index.php' style='display:inline;'>";
                     echo "<input type='hidden' name='product_id' value='" . $row['id'] . "'>";
-                    echo "<button type='submit' name='add_to_cart' class='btn-cart'>+</button>";
                     echo "</form>";
                     echo "<form method='POST' action='index.php' style='display:inline;'>";
+                    echo "<button type='submit' name='add_to_cart' class='btn-cart btn-beli'>+</button>";
                     echo "<input type='hidden' name='product_id' value='" . $row['id'] . "'>";
                     echo "<input type='hidden' name='seller_id' value='" . $row['seller_id'] . "'>";
-                    echo "<button type='submit' name='chat' class='btn-chat'>Chat</button>";
+                    echo "<button type='submit' name='chat' class='btn-chat btn-beli'>Chat</button>";
                     echo "</form>";
                     echo "</div>";
                     echo "</div>";
@@ -215,9 +215,11 @@ if ($selected_category) {
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-KyZXEAg3QhqLMpG8r+Knujsl5+5hb7xD9Cxpse6/8B0=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@1.5.1/dist/flowbite.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
 </body>
 
 </html>

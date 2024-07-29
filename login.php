@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - SEKENID</title>
-    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="login.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="container" id="target">
         <div class="login-container">
-            <h1 class="judul">SEKENID</h1>
+            <h1 class="h1">MASUK</h1>
             <form action="" method="post">
                 <div class="mb-3">
                     <label for="username" class="form-label">Username:</label>
@@ -66,8 +66,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="password" class="form-label">Password:</label>
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
-                <input type="submit" class="btn btn-outline-primary" value="Login">
+                <button type="submit" class="oauthButton">Login</button>
             </form>
+            <div class="separator">
+                <div></div>
+                <span>OR</span>
+                <div></div>
+            </div>
+            <button class="oauthButton" onclick="window.location.href='register.php'">Register</button>
 
             <?php if (isset($_SESSION['login_error'])): ?>
                 <div class="alert alert-<?php echo $_SESSION['login_error_type']; ?> mt-3 animate__animated animate__fadeInDown"

@@ -22,23 +22,42 @@ $chat_rooms = $stmt->get_result();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List of Chats</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="scene.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css" rel="stylesheet" />
 </head>
 
 <body>
+    <button class="backbtn btn btn-warning" id="homeButton">Kembali</button>
     <div class="chat-list-container">
-        <h2>Your Chat Rooms</h2>
-        <ul>
+        <div class="chat-header">
+            Your Chat Rooms
+        </div>
+        <div class="list-group">
             <?php while ($row = $chat_rooms->fetch_assoc()): ?>
-                <li>
-                    <a href="chat.php?room_id=<?php echo $row['room_id']; ?>">
-                        Chat with
-                        <?php echo $row['buyer_id'] == $user ? 'Seller ' . $row['seller_id'] : 'Buyer ' . $row['buyer_id']; ?>
-                    </a>
-                </li>
+                <a href="chat.php?room_id=<?php echo $row['room_id']; ?>" class="list-group-item list-group-item-action">
+                    <div class="chat-avatar"></div>
+                    <div class="chat-info">
+                        <div class="chat-name">
+                            <?php echo $row['buyer_id'] == $user ? 'Seller ' . $row['seller_id'] : 'Buyer ' . $row['buyer_id']; ?>
+                        </div>
+                        <div class="chat-preview">Pesan</div>
+                    </div>
+                </a>
             <?php endwhile; ?>
-        </ul>
+        </div>
     </div>
+    <script>
+        document.getElementById("homeButton").addEventListener("click", function () {
+            window.location.href = "index.php";
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
-</html> 
+</html>

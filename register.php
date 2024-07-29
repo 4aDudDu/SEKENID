@@ -43,17 +43,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - SEKENID</title>
-    <link rel="stylesheet" href="style2.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="login.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 
 <body>
     <div class="container" id="target">
         <div class="login-container">
-            <h1 class="judul">SEKENID</h1>
-
+            <h1 class="h1">DAFTAR</h1>
             <form id="register-form" action="" method="post">
                 <div class="mb-3">
                     <label for="username" class="form-label">Username:</label>
@@ -75,27 +73,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="confirm_password" class="form-label">Confirm Password:</label>
                     <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="oauthButton">Register</button>
             </form>
+            <div class="separator">
+                <div></div>
+                <span>OR</span>
+                <div></div>
+            </div>
+            <button class="oauthButton" onclick="window.location.href='login.php'">Login</button>
 
             <?php if (isset($_SESSION['register_error'])): ?>
-                <div class="alert alert-<?php echo $_SESSION['register_error_type']; ?>" role="alert">
-                    <?php echo $_SESSION['register_error']; ?>
+                <div class="alert alert-<?php echo $_SESSION['register_error_type']; ?> mt-3 animate__animated animate__fadeInDown"
+                    id="error-message">
+                    <?php echo $_SESSION['register_error'];
+                    unset($_SESSION['register_error']);
+                    unset($_SESSION['register_error_type']); ?>
                 </div>
-                <?php unset($_SESSION['register_error']); ?>
-                <?php unset($_SESSION['register_error_type']); ?>
             <?php endif; ?>
-
-            <div class="card-footer text-center">
-                <p>Sudah punya akun? <a href="login.php">Login disini</a></p>
-            </div>
         </div>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $(".container").addClass("animate__animated animate__backInDown");
+        window.addEventListener('DOMContentLoaded', () => {
+            const errorMessage = document.getElementById('error-message');
+            if (errorMessage) {
+                setTimeout(() => {
+                    errorMessage.classList.remove('animate__fadeInDown');
+                    errorMessage.classList.add('animate__fadeOutUp');
+                }, 3000);
+            }
         });
     </script>
 </body>

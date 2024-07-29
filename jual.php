@@ -45,17 +45,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_product'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Produk</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="jual.css">
     <link rel="website icon" type="png" href="assets/sekenid.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
-    <div class="container">
-        <h1>Tambah Produk</h1>
+
+<button class="btn-53 backbtn" id="homeButton">
+  <div class="original">BACK</div>
+  <div class="letters">
+    <span>B</span>
+    <span>A</span>
+    <span>C</span>
+    <span>K</span>
+  </div>
+</button>
+
+    <div class="container mb-3 jual-container">
+        <h1 class="h1">Tambah Barang</h1>
         <form method="POST" enctype="multipart/form-data" action="jual.php">
             <div class="mb-3">
                 <label for="nama-produk" class="col-form-label">Nama Produk:</label>
@@ -82,7 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_product'])) {
             </div>
             <div class="mb-3">
                 <label for="foto-barang" class="col-form-label">Foto:</label>
-                <input type="file" class="form-control" name="foto" id="foto-barang" accept=".jpg, .png, .heic, .bmp" required />
+                <input type="file" class="form-control" name="foto" id="foto-barang" accept=".jpg, .png, .heic, .bmp"
+                    required />
             </div>
             <div class="mb-3">
                 <label for="harga-barang" class="col-form-label">Harga (Rp):</label>
@@ -93,6 +107,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_product'])) {
         </form>
     </div>
 
+    <script>
+        document.getElementById("homeButton").addEventListener("click", function () {
+            window.location.href = "index.php";
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

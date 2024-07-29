@@ -36,14 +36,17 @@ if ($room_id) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Room</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="scene.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css" rel="stylesheet" />
 </head>
 
 <body>
+        <button class="backbtn btn btn-warning" id="homeButton">Kembali</button>
     <div class="chat-container">
         <div class="chat-box">
             <?php while ($row = $messages->fetch_assoc()): ?>
-                <div class="chat-message">
+                <div class="chat-message <?php echo $row['sender_id'] == $user ? 'you' : 'other'; ?>">
                     <strong><?php echo $row['sender_id'] == $user ? 'You' : 'Other'; ?>:</strong>
                     <?php echo $row['message']; ?>
                 </div>
@@ -51,9 +54,18 @@ if ($room_id) {
         </div>
         <form method="POST" action="chat.php?room_id=<?php echo $room_id; ?>">
             <input type="text" name="message" placeholder="Type your message" required>
-            <button type="submit">Send</button>
+            <button type="submit">Kirim</button>
         </form>
     </div>
+
+    <script>
+        document.getElementById("homeButton").addEventListener("click", function () {
+            window.location.href = "index.php";
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
