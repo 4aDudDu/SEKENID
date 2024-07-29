@@ -7,7 +7,8 @@
   font-style: normal;
 }
 
-@media only screen and (max-width:800px) {
+/* Media Queries */
+@media only screen and (max-width: 800px) {
   .main {
     width: 80%;
     padding: 0;
@@ -18,8 +19,7 @@
   }
 }
 
-@media only screen and (max-width:500px) {
-
+@media only screen and (max-width: 500px) {
   .menu,
   .main,
   .right {
@@ -27,35 +27,17 @@
   }
 }
 
+/* Fonts and Text Styles */
 .seken-text {
   font-family: fonthead;
   color: aliceblue;
 }
 
-.cart-ico {
-  padding: 5px;
-  /* size: 50px; */
-  filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
-  -webkit-filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
-}
-
-.navbar-drop {
-  transition: opacity 0.6s ease;
-  -webkit-transition: opacity 0.6s ease;
-  -moz-transition: opacity 0.6s ease;
-  -ms-transition: opacity 0.6s ease;
-  -o-transition: opacity 0.6s ease;
-}
-
-.navbar-drop:hover> :not(:hover) {
-  opacity: 0.4;
-  scale: 1.2;
-}
-
+/* Navbar Styles */
 .navbar-bg {
   background-image: url(assets/navbar-bg.png);
   backdrop-filter: blur(10px);
-
+  position: relative;
 }
 
 .navbar-bg::after {
@@ -69,6 +51,16 @@
   opacity: 2;
 }
 
+.navbar-drop {
+  transition: opacity 0.6s ease;
+}
+
+.navbar-drop:hover > :not(:hover) {
+  opacity: 0.4;
+  transform: scale(1.2);
+}
+
+/* Button Styles */
 .btnsell {
   position: fixed;
   bottom: 70px;
@@ -92,8 +84,6 @@
   position: absolute;
   top: -20px;
   left: 0.5%;
-  bottom: 0.5px;
-  transform: translate(0, -50%);
   background-color: transparent;
   padding: 0;
   border: none;
@@ -105,106 +95,6 @@
 .btnsell:active {
   transform: scale(0.95);
   background-color: #f0f0f0;
-}
-
-.modal.fade .modal-dialog {
-  animation: modalFadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-/* Updated card styles */
-.card {
-  flex: 1 1 calc(25% - 40px);
-  /* Adjusted flex-basis to fit four cards in a row */
-  margin: 10px;
-  max-width: calc(25% - 40px);
-  /* Ensures maximum width matches the flex-basis */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  height: 300px;
-  /* Height for better visual */
-  padding: 15px;
-  box-sizing: border-box;
-  background: #f5f5f5;
-  position: relative;
-  overflow: hidden;
-  /* Hidden overflow for better layout */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-}
-
-.card-img {
-  background-color: #ffcaa6;
-  height: 150px;
-  /* Adjusted height */
-  object-fit: cover;
-  width: 100%;
-  /* Full width */
-  border-radius: 0.5rem;
-  transition: 0.3s ease;
-}
-
-.card-info {
-  padding-top: 10px;
-  margin-top: 10px;
-}
-
-svg {
-  width: 20px;
-  height: 20px;
-}
-
-.card-footer {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 10px;
-  border-top: 1px solid #ddd;
-  margin-top: 10px;
-}
-
-.card-footer button {
-  padding: 5px 10px;
-}
-
-.text-title {
-  font-weight: 880;
-  font-size: 20px;
-  line-height: 1;
-}
-
-.text-body {
-  font-size: 0.9em;
-  padding-bottom: 10px;
-}
-
-.card-button {
-  border: 1px solid #252525;
-  display: flex;
-  padding: 0.3em;
-  cursor: pointer;
-  border-radius: 50px;
-  transition: 0.3s ease-in-out;
-}
-
-.card-img:hover {
-  transform: translateY(-25%);
-  box-shadow: rgba(226, 196, 63, 0.25) 0px 13px 47px -5px,
-    rgba(180, 71, 71, 0.3) 0px 8px 16px -8px;
-}
-
-.card-button:hover {
-  border: 1px solid #ffcaa6;
-  background-color: #ffcaa6;
 }
 
 .btn-beli {
@@ -256,30 +146,86 @@ svg {
   transition-delay: 0.4s;
   color: aliceblue;
 }
+.card {
+  display: flex;
+  flex-direction: column;
+  width: calc(25% - 40px);
+  margin: 10px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #f5f5f5;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
 
-/* Ensures that the cards wrap and fill the container */
+.card-img-container {
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.card-info {
+  padding: 10px 0;
+  margin-top: 10px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+  margin-top: 10px;
+}
+
+.card-footer button {
+  padding: 5px 10px;
+}
+
+
+.card-button {
+  border: 1px solid #252525;
+  display: flex;
+  padding: 0.3em;
+  cursor: pointer;
+  border-radius: 50px;
+  transition: 0.3s ease-in-out;
+}
+
+.card-img:hover {
+  transform: translateY(-5%);
+  box-shadow: rgba(226, 196, 63, 0.25) 0px 13px 47px -5px, rgba(180, 71, 71, 0.3) 0px 8px 16px -8px;
+}
+
+.card-button:hover {
+  border: 1px solid #ffcaa6;
+  background-color: #ffcaa6;
+}
+
+/* Container for Cards */
 .cards-container {
   display: flex;
   flex-wrap: wrap;
-  /* Allows wrapping */
   justify-content: flex-start;
-  /* Align cards to the start */
   gap: 20px;
-  /* Space between cards */
   margin-bottom: 20px;
   padding: 10px;
-  /* Padding to add space inside the container */
 }
 
-.wrapper.show {
-  display: inline-block;
-  animation: fadeIn 0.5s forwards;
+/* Modal Styles */
+.modal.fade .modal-dialog {
+  animation: modalFadeIn 0.5s ease-out;
 }
 
-.wrapper.hide {
-  animation: fadeOut 0.5s forwards;
-}
-
+/* Toggle Switch Styles */
 .switch {
   transform: translateY(-200px);
   position: relative;
@@ -290,28 +236,6 @@ svg {
   gap: 30px;
   width: 50px;
   height: 20px;
-}
-
-.card-side::before {
-  position: absolute;
-  content: "Log in";
-  left: -70px;
-  top: 0;
-  width: 100px;
-  text-decoration: underline;
-  color: var(--font-color);
-  font-weight: 600;
-}
-
-.card-side::after {
-  position: absolute;
-  content: "Sign up";
-  left: 70px;
-  top: 0;
-  width: 100px;
-  text-decoration: none;
-  color: var(--font-color);
-  font-weight: 600;
 }
 
 .toggle {
@@ -358,14 +282,7 @@ svg {
   transform: translateX(30px);
 }
 
-.toggle:checked~.card-side:before {
-  text-decoration: none;
-}
-
-.toggle:checked~.card-side:after {
-  text-decoration: underline;
-}
-
+/* Flip Card Styles */
 .flip-card__inner {
   width: 300px;
   height: 350px;
@@ -379,10 +296,6 @@ svg {
 
 .toggle:checked~.flip-card__inner {
   transform: rotateY(180deg);
-}
-
-.toggle:checked~.flip-card__front {
-  box-shadow: none;
 }
 
 .flip-card__front,
@@ -406,6 +319,7 @@ svg {
   transform: rotateY(180deg);
 }
 
+/* Form Styles */
 .flip-card__form {
   display: flex;
   flex-direction: column;
@@ -414,7 +328,7 @@ svg {
 }
 
 .title {
-  margin: 20px 0 20px 0;
+  margin: 20px 0;
   font-size: 25px;
   font-weight: 900;
   text-align: center;
@@ -444,14 +358,8 @@ svg {
   border: 2px solid var(--input-focus);
 }
 
-.flip-card__btn:active,
-.button-confirm:active {
-  box-shadow: 0px 0px var(--main-color);
-  transform: translate(3px, 3px);
-}
-
 .flip-card__btn {
-  margin: 20px 0 20px 0;
+  margin: 20px 0;
   width: 120px;
   height: 40px;
   border-radius: 5px;
@@ -464,21 +372,13 @@ svg {
   cursor: pointer;
 }
 
-.wrapper {
-  display: absolute;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 300%;
-  height: 200%;
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
+.flip-card__btn:active,
+.button-confirm:active {
+  box-shadow: 0px 0px var(--main-color);
+  transform: translate(3px, 3px);
 }
 
+/* Animation Keyframes */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -499,6 +399,30 @@ svg {
   }
 }
 
+/* Wrapper and Close Button */
+.wrapper {
+  display: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300%;
+  height: 200%;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper.show {
+  display: inline-block;
+  animation: fadeIn 0.5s forwards;
+}
+
+.wrapper.hide {
+  animation: fadeOut 0.5s forwards;
+}
+
 .close-button {
   position: absolute;
   top: -140px;
@@ -511,10 +435,31 @@ svg {
   font-size: 16px;
 }
 
-
+/* Container Styles */
 .container {
   padding-top: 160px;
   padding-bottom: 20px;
   border-radius: 10px;
   margin-top: 10px;
+}
+
+/* Additional Styles */
+svg {
+  width: 20px;
+  height: 20px;
+}
+
+.text-title {
+  font-weight: 880;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.text-body {
+  font-size: 0.9em;
+  padding-bottom: 10px;
+}
+
+.cart-ico {
+  padding: 10px;
 }

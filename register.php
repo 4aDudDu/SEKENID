@@ -6,10 +6,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $email = $_POST['email'];
     $no_hp = $_POST['no_hp'];
-    $password = $_POST['password'];
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
     $confirm_password = $_POST['confirm_password'];
 
-    if ($password !== $confirm_password) {
+    if ($_POST['password'] !== $confirm_password) {
         $_SESSION['register_error'] = "Passwords do not match!";
         $_SESSION['register_error_type'] = "danger";
     } else {
@@ -20,18 +20,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['register_error'] = "Username, Email, or Phone Number already exists!";
             $_SESSION['register_error_type'] = "danger";
         } else {
-            $query = "INSERT INTO akun (username, email, no_hp, password) VALUES ('$username', '$email', '$no_hp', '$password')";
-
-            if ($conn->query($query) === TRUE) {
-                $_SESSION['register_success'] = "Registration successful! Please login.";
+            $insert_query = "INSERT INTO akun (username, email, no_hp, password) VALUES ('$username', '$email', '$no_hp', '$password')";
+            if ($conn->query($insert_query) === TRUE) {
+                $_SESSION['register_success'] = "Registration successful! Please log in.";
+                $_SESSION['register_success_type'] = "success";
                 header("Location: login.php");
                 exit;
             } else {
-                $_SESSION['register_error'] = "Error: " . $query . "<br>" . $conn->error;
+                $_SESSION['register_error'] = "Error: " . $conn->error;
                 $_SESSION['register_error_type'] = "danger";
             }
         }
     }
+    $conn->close();
 }
 ?>
 
@@ -52,9 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container" id="target">
         <div class="login-container">
             <h1 class="judul">SEKENID</h1>
-            <!-- Form register -->
-            <form action="" method="post">
-                <!-- Input username, email, phone number, password, and confirm password -->
+
+            <form id="register-form" action="" method="post">
                 <div class="mb-3">
                     <label for="username" class="form-label">Username:</label>
                     <input type="text" class="form-control" id="username" name="username" required>
@@ -75,11 +75,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="confirm_password" class="form-label">Confirm Password:</label>
                     <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
                 </div>
-                <!-- Register button -->
-                <input type="submit" class="btn btn-outline-primary" value="Register">
+                <button type="submit" class="btn btn-primary">Register</button>
             </form>
 
-            <!-- Display alert message if there's any error -->
             <?php if (isset($_SESSION['register_error'])): ?>
                 <div class="alert alert-<?php echo $_SESSION['register_error_type']; ?>" role="alert">
                     <?php echo $_SESSION['register_error']; ?>
@@ -88,15 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php unset($_SESSION['register_error_type']); ?>
             <?php endif; ?>
 
-            <!-- Display success message if registration is successful -->
-            <?php if (isset($_SESSION['register_success'])): ?>
-                <div class="alert alert-success" role="alert">
-                    <?php echo $_SESSION['register_success']; ?>
-                </div>
-                <?php unset($_SESSION['register_success']); ?>
-            <?php endif; ?>
-
-            <!-- Link to login page -->
             <div class="card-footer text-center">
                 <p>Sudah punya akun? <a href="login.php">Login disini</a></p>
             </div>

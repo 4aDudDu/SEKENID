@@ -1,0 +1,6 @@
+{
+    "require": {
+        "cboden/ratchet": "^0.4.3",
+        "twilio/sdk": "^8.2"
+    }
+}
