@@ -21,11 +21,12 @@ $stmt->bind_param("i", $user);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Fetch orders
-$order_stmt = $conn->prepare("SELECT p.namabarang, o.jumlah, a.username AS pembeli, o.alamat, o.nomor_hp, o.provinsi 
+// Fetch orders and corresponding chat rooms
+$order_stmt = $conn->prepare("SELECT p.namabarang, o.jumlah, a.username AS pembeli, o.alamat, o.nomor_hp, o.provinsi, o.created_at, cr.room_id 
 FROM orders o 
 JOIN produk p ON o.product_id = p.id 
 JOIN akun a ON o.buyer_id = a.id 
+LEFT JOIN chat_rooms cr ON o.buyer_id = cr.buyer_id AND o.seller_id = cr.seller_id
 WHERE p.seller_id = ?");
 $order_stmt->bind_param("i", $user);
 $order_stmt->execute();
@@ -88,6 +89,8 @@ $order_result = $order_stmt->get_result();
                     echo "<p class='card-text'>Alamat: " . $order['alamat'] . "</p>";
                     echo "<p class='card-text'>Nomor HP: " . $order['nomor_hp'] . "</p>";
                     echo "<p class='card-text'>Provinsi: " . $order['provinsi'] . "</p>";
+                    echo "<p class='card-text'>Waktu Pemesanan: " . $order['created_at'] . "</p>";
+                    echo "<a href='chat.php?room_id=" . $order['room_id'] . "' class='btn btn-primary'>Chat</a>";
                     echo "</div>";
                     echo "</div>";
                     echo "</div>";
