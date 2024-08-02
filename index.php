@@ -186,10 +186,12 @@ if ($selected_category) {
                     echo "<input type='hidden' name='product_id' value='" . $row['id'] . "'>";
                     echo "</form>";
                     echo "<form method='POST' action='index.php' style='display:inline;'>";
+                    echo "<div class='input-group'>";
                     echo "<button type='submit' name='add_to_cart' class='btn-cart btn-beli'>+</button>";
                     echo "<input type='hidden' name='product_id' value='" . $row['id'] . "'>";
                     echo "<input type='hidden' name='seller_id' value='" . $row['seller_id'] . "'>";
                     echo "<button type='submit' name='chat' class='btn-chat btn-beli'>Chat</button>";
+                    echo "</div>";
                     echo "</form>";
                     echo "</div>";
                     echo "</div>";

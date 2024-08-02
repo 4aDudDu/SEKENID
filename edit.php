@@ -21,21 +21,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_product'])) {
     $harga = $_POST['harga'];
     $kategori = $_POST['kategori'];
     $jenis = $_POST['jenis'];
+    $qty = $_POST['qty'];  // Add this line to capture qty
     $foto = $_FILES['foto']['name'];
     $target_dir = "uploads/";
     $target_file = $target_dir . basename($foto);
 
     if ($foto) {
         if (move_uploaded_file($_FILES['foto']['tmp_name'], $target_file)) {
-            $stmt = $conn->prepare("UPDATE produk SET namabarang = ?, harga = ?, kategori = ?, jenis = ?, foto = ? WHERE id = ? AND seller_id = ?");
-            $stmt->bind_param("ssssssi", $namabarang, $harga, $kategori, $jenis, $target_file, $product_id, $user);
+            $stmt = $conn->prepare("UPDATE produk SET namabarang = ?, harga = ?, kategori = ?, jenis = ?, qty = ?, foto = ? WHERE id = ? AND seller_id = ?");
+            $stmt->bind_param("ssssissi", $namabarang, $harga, $kategori, $jenis, $qty, $target_file, $product_id, $user);
         } else {
             echo "Error uploading file.";
             exit();
         }
     } else {
-        $stmt = $conn->prepare("UPDATE produk SET namabarang = ?, harga = ?, kategori = ?, jenis = ? WHERE id = ? AND seller_id = ?");
-        $stmt->bind_param("sssssi", $namabarang, $harga, $kategori, $jenis, $product_id, $user);
+        $stmt = $conn->prepare("UPDATE produk SET namabarang = ?, harga = ?, kategori = ?, jenis = ?, qty = ? WHERE id = ? AND seller_id = ?");
+        $stmt->bind_param("ssssiii", $namabarang, $harga, $kategori, $jenis, $qty, $product_id, $user);
     }
 
     if ($stmt->execute()) {
@@ -59,8 +60,11 @@ if (!$product) {
 }
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,9 +72,10 @@ if (!$product) {
     <link rel="stylesheet" href="laporan.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="container mt-5">
-    <button type="button" class="btn btn-warning backbtn" id="homeButton">Kembali</button>
+        <button type="button" class="btn btn-warning backbtn" id="homeButton">Kembali</button>
         <h1>Edit Produk</h1>
         <form method="POST" enctype="multipart/form-data" action="edit.php?id=<?php echo $product_id; ?>">
             <div class="mb-3">
@@ -105,6 +110,10 @@ if (!$product) {
                 <label for="harga-barang" class="col-form-label">Harga (Rp):</label>
                 <input type="number" class="form-control" name="harga" id="harga-barang" value="<?php echo $product['harga']; ?>" required />
             </div>
+            <div class="mb-3">
+                <label for="qty-barang" class="col-form-label">Kuantitas:</label>
+                <input type="number" class="form-control" name="qty" id="qty-barang" value="<?php echo $product['qty']; ?>" required />
+            </div>
             <input type="hidden" name="update_product" value="1">
             <button type="submit" class="btn btn-warning">Save</button>
         </form>
@@ -116,4 +125,5 @@ if (!$product) {
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

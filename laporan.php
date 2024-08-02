@@ -20,6 +20,16 @@ $stmt = $conn->prepare("SELECT * FROM produk WHERE seller_id = ?");
 $stmt->bind_param("i", $user);
 $stmt->execute();
 $result = $stmt->get_result();
+
+// Fetch orders
+$order_stmt = $conn->prepare("SELECT p.namabarang, o.jumlah, a.username AS pembeli, o.alamat, o.nomor_hp, o.provinsi 
+FROM orders o 
+JOIN produk p ON o.product_id = p.id 
+JOIN akun a ON o.buyer_id = a.id 
+WHERE p.seller_id = ?");
+$order_stmt->bind_param("i", $user);
+$order_stmt->execute();
+$order_result = $order_stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +48,7 @@ $result = $stmt->get_result();
     <div class="container mt-5">
         <button type="button" class="btn btn-warning backbtn" id="homeButton">Kembali</button>
         <h1 class="text-center judul">Laporan Produk</h1>
-        <div class="row">
+        <div class="row mb-5">
             <?php
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
@@ -60,6 +70,30 @@ $result = $stmt->get_result();
                 }
             } else {
                 echo "<p class='text-center'>Tidak ada produk yang ditemukan.</p>";
+            }
+            ?>
+        </div>
+
+        <h2 class="text-center judul">Pesanan Masuk</h2>
+        <div class="row">
+            <?php
+            if ($order_result->num_rows > 0) {
+                while ($order = $order_result->fetch_assoc()) {
+                    echo "<div class='col-md-4 mb-4'>";
+                    echo "<div class='card h-100'>";
+                    echo "<div class='card-body'>";
+                    echo "<h5 class='card-title'>Pesanan untuk: " . $order['namabarang'] . "</h5>";
+                    echo "<p class='card-text'>Jumlah: " . $order['jumlah'] . "</p>";
+                    echo "<p class='card-text'>Nama Pembeli: " . $order['pembeli'] . "</p>";
+                    echo "<p class='card-text'>Alamat: " . $order['alamat'] . "</p>";
+                    echo "<p class='card-text'>Nomor HP: " . $order['nomor_hp'] . "</p>";
+                    echo "<p class='card-text'>Provinsi: " . $order['provinsi'] . "</p>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</div>";
+                }
+            } else {
+                echo "<p class='text-center'>Tidak ada pesanan yang masuk.</p>";
             }
             ?>
         </div>
