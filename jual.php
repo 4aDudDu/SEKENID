@@ -1,3 +1,4 @@
+
 <?php
 include 'koneksi.php';
 session_start();
@@ -14,8 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_product'])) {
     $created_date = date('Y-m-d');
     $kategori = $_POST['kategori'];
     $jenis = $_POST['jenis'];
-    $qty = $_POST['qty'];  // Menambahkan qty
+    $qty = $_POST['qty']; 
     $foto = $_FILES['foto']['name'];
+    $provinsi = $_POST['provinsi'];
+    $kota = $_POST['kota'];
     $target_dir = "uploads/";
     $target_file = $target_dir . basename($foto);
 
@@ -28,8 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_product'])) {
     $seller_id = $user['id'];
 
     if (move_uploaded_file($_FILES['foto']['tmp_name'], $target_file)) {
-        $stmt = $conn->prepare("INSERT INTO produk (namabarang, harga, created_date, kategori, jenis, qty, foto, seller_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssssi", $namabarang, $harga, $created_date, $kategori, $jenis, $qty, $target_file, $seller_id);
+        $stmt = $conn->prepare("INSERT INTO produk (namabarang, harga, created_date, kategori, jenis, qty, foto, seller_id, provinsi, kota) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssisss", $namabarang, $harga, $created_date, $kategori, $jenis, $qty, $target_file, $seller_id, $provinsi, $kota);
 
         if ($stmt->execute()) {
             echo "<script>alert('Produk berhasil ditambahkan.'); window.location.href='index.php';</script>";
@@ -46,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_product'])) {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,9 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_product'])) {
     <link rel="website icon" type="png" href="assets/sekenid.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
 <body>
-
 <button class="btn-53 backbtn" id="homeButton">
   <div class="original">BACK</div>
   <div class="letters">
@@ -95,8 +95,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_product'])) {
                 </select>
             </div>
             <div class="mb-3">
-                <label for="qty" class="col-form-label">Kuantitas:</label> <!-- Menambahkan field qty -->
+                <label for="qty" class="col-form-label">Kuantitas:</label>
                 <input type="number" class="form-control" name="qty" id="qty" required />
+            </div>
+            <div class="mb-3">
+                <label for="provinsi" class="col-form-label">Provinsi:</label>
+                <select class="form-select" name="provinsi" id="provinsi" required>
+                    <option value="">Pilih Provinsi</option>
+                    <?php
+                    $sql = "SELECT id, nama_provinsi FROM provinsi";
+                    $result = $conn->query($sql);
+                    while($row = $result->fetch_assoc()) {
+                        echo "<option value='{$row['id']}'>{$row['nama_provinsi']}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="kota" class="col-form-label">Kota:</label>
+                <select class="form-select" name="kota" id="kota" required>
+                    <option value="">Pilih Kota</option>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="foto-barang" class="col-form-label">Foto:</label>
@@ -111,12 +130,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_product'])) {
         </form>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         document.getElementById("homeButton").addEventListener("click", function () {
             window.location.href = "index.php";
         });
+
+        $(document).ready(function() {
+            $('#provinsi').change(function() {
+                var provinsi_id = $(this).val();
+                console.log("Selected province ID: " + provinsi_id); // Debugging line
+                if(provinsi_id) {
+                    $.ajax({
+                        type: 'GET',
+                        url: 'get_cities.php',
+                        data: 'provinsi_id='+provinsi_id,
+                        success: function(data) {
+                            console.log("AJAX success data: ", data); // Debugging line
+                            $('#kota').html('<option value="">Pilih Kota</option>'); 
+                            var cities = JSON.parse(data);
+                            $.each(cities, function(key, value) {
+                                $('#kota').append('<option value="'+ value.id +'">'+ value.nama_kota +'</option>');
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.log("AJAX error: ", error); // Debugging line
+                        }
+                    });
+                } else {
+                    $('#kota').html('<option value="">Pilih Kota</option>');
+                }
+            });
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
+
