@@ -58,64 +58,72 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['purchase'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beli Produk</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/flowbite@1.6.2/dist/flowbite.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@1.6.2/dist/flowbite.bundle.js"></script>
+    <link rel="stylesheet" href="laporan.css">
 </head>
 <body>
-    <div class="container mx-auto p-4">
-        <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-            <h2 class="text-2xl font-semibold mb-4 text-center">Pembelian Produk</h2>
+    <div class="container mt-5">
+        <button type="button" class="btn btn-warning backbtn" id="homeButton">Kembali</button>
+        <h1 class="text-center judul">Pembelian Produk</h1>
 
-            <?php if ($success_message): ?>
-                <div class="alert alert-success mb-4">
-                    <?php echo $success_message; ?>
-                </div>
-            <?php elseif ($error_message): ?>
-                <div class="alert alert-danger mb-4">
-                    <?php echo $error_message; ?>
-                </div>
-            <?php endif; ?>
+        <?php if ($success_message): ?>
+            <div class="alert alert-success mb-4">
+                <?php echo $success_message; ?>
+            </div>
+        <?php elseif ($error_message): ?>
+            <div class="alert alert-danger mb-4">
+                <?php echo $error_message; ?>
+            </div>
+        <?php endif; ?>
 
-            <div class="flex flex-col md:flex-row gap-4">
-                <!-- Product Details -->
-                <div class="md:w-1/2">
-                    <div class="card">
-                        <img src="<?php echo $product['foto']; ?>" class="w-full h-60 object-cover rounded-t-lg" alt="Product Image">
-                        <div class="p-4">
-                            <h3 class="text-xl font-semibold"><?php echo $product['namabarang']; ?></h3>
-                            <p class="text-gray-600">Kategori: <?php echo $product['kategori']; ?></p>
-                            <p class="text-gray-600">Jenis: <?php echo $product['jenis']; ?></p>
-                            <p class="text-gray-800 font-bold">Harga: Rp. <?php echo number_format($product['harga'], 0, ',', '.'); ?></p>
-                            <p class="text-gray-800 font-bold">Stok: <?php echo $product['qty']; ?></p>
-                        </div>
+        <div class="row">
+            <!-- Product Details -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <img src="<?php echo $product['foto']; ?>" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title"><?php echo $product['namabarang']; ?></h5>
+                        <p class="card-text">Kategori: <?php echo $product['kategori']; ?></p>
+                        <p class="card-text">Jenis: <?php echo $product['jenis']; ?></p>
+                        <p class="card-text">Harga: Rp. <?php echo number_format($product['harga'], 0, ',', '.'); ?></p>
+                        <p class="card-text">Stok: <?php echo $product['qty']; ?></p>
                     </div>
                 </div>
+            </div>
 
-                <!-- Form Section -->
-                <div class="md:w-1/2">
-                    <form method="POST" action="beli.php?id=<?php echo $product_id; ?>">
-                        <div class="mb-4">
-                            <label for="alamat" class="block text-sm font-medium text-gray-700">Alamat</label>
-                            <textarea class="form-textarea mt-1 block w-full" id="alamat" name="alamat" rows="3" required></textarea>
-                        </div>
-                        <div class="mb-4">
-                            <label for="nomor_hp" class="block text-sm font-medium text-gray-700">Nomor HP</label>
-                            <input type="text" class="form-input mt-1 block w-full" id="nomor_hp" name="nomor_hp" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="provinsi" class="block text-sm font-medium text-gray-700">Provinsi</label>
-                            <input type="text" class="form-input mt-1 block w-full" id="provinsi" name="provinsi" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="jumlah" class="block text-sm font-medium text-gray-700">Jumlah</label>
-                            <input type="number" class="form-input mt-1 block w-full" id="jumlah" name="jumlah" required>
-                        </div>
-                        <button type="submit" name="purchase" class="btn btn btn-warning">Beli Barang!</button>
-                    </form>
+            <!-- Form Section -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <form method="POST" action="beli.php?id=<?php echo $product_id; ?>">
+                            <div class="mb-3">
+                                <label for="alamat" class="form-label">Alamat</label>
+                                <textarea class="form-control" id="alamat" name="alamat" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nomor_hp" class="form-label">Nomor HP</label>
+                                <input type="text" class="form-control" id="nomor_hp" name="nomor_hp" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="provinsi" class="form-label">Provinsi</label>
+                                <input type="text" class="form-control" id="provinsi" name="provinsi" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="jumlah" class="form-label">Jumlah</label>
+                                <input type="number" class="form-control" id="jumlah" name="jumlah" required>
+                            </div>
+                            <button type="submit" name="purchase" class="btn btn-warning">Beli Barang!</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById("homeButton").addEventListener("click", function () {
+            window.location.href = "index.php";
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

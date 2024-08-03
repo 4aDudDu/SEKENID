@@ -153,8 +153,16 @@ if ($selected_category) {
             </div>
         </div>
     </nav>
-
     <div class="container">
+        <br>
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+                <img src="assets/sekenid.png" alt="SEKENID" class="img-fluid" style="max-width: 80%;">
+            </div>
+            <div class="col-md-6 text-center">
+                <img src="assets/P2MW.svg" alt="P2MW" class="img-fluid" style="max-width: 80%;">
+            </div>
+        </div>
         <h1 style="font-size: xx-large; font-weight:bold; text-align: center;">SEKENID</h1>
         <br>
         <p style="text-align: justify;">
@@ -179,14 +187,6 @@ if ($selected_category) {
             mereka dan mencapai kesuksesan dalam dunia bisnis.
         </p>
         <br><br>
-        <div class="row justify-content-center">
-            <div class="col-md-6 text-center">
-                <img src="assets/sekenid.png" alt="SEKENID" class="img-fluid" style="max-width: 80%;">
-            </div>
-            <div class="col-md-6 text-center">
-                <img src="assets/P2MW.svg" alt="P2MW" class="img-fluid" style="max-width: 80%;">
-            </div>
-        </div>F
 
     </div>
     <!-- footer -->
