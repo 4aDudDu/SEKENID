@@ -12,12 +12,22 @@ if (!$is_logged_in) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['delete_product'])) {
         $product_id = $_POST['product_id'];
-        $stmt = $conn->prepare("DELETE FROM produk WHERE id = ? AND seller_id = ?");
-        $stmt->bind_param("ii", $product_id, $user);
-        $stmt->execute();
+        $order_check_stmt = $conn->prepare("SELECT COUNT(*) as order_count FROM orders WHERE product_id = ? AND seller_id = ?");
+        $order_check_stmt->bind_param("ii", $product_id, $user);
+        $order_check_stmt->execute();
+        $order_check_result = $order_check_stmt->get_result();
+        $order_check = $order_check_result->fetch_assoc();
+
+        if ($order_check['order_count'] == 0) {
+            $stmt = $conn->prepare("DELETE FROM produk WHERE id = ? AND seller_id = ?");
+            $stmt->bind_param("ii", $product_id, $user);
+            $stmt->execute();
+        } else {
+            echo "<script>alert('Masih ada pesanan yang belum diselesaikan!');</script>";
+        }
     } elseif (isset($_POST['complete_order'])) {
         $order_id = $_POST['order_id'];
-        $stmt = $conn->prepare("DELETE FROM orders WHERE id = ?");
+        $stmt = $conn->prepare("UPDATE orders SET status = 'completed' WHERE id = ?");
         $stmt->bind_param("i", $order_id);
         $stmt->execute();
     } elseif (isset($_POST['chat'])) {
@@ -44,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+// Fetch products
 $stmt = $conn->prepare("SELECT * FROM produk WHERE seller_id = ?");
 $stmt->bind_param("i", $user);
 $stmt->execute();
@@ -55,7 +66,7 @@ FROM orders o
 JOIN produk p ON o.product_id = p.id 
 JOIN akun a ON o.buyer_id = a.id 
 LEFT JOIN chat_rooms cr ON o.buyer_id = cr.buyer_id AND o.seller_id = cr.seller_id
-WHERE p.seller_id = ?");
+WHERE p.seller_id = ? AND o.status = 'pending'");
 $order_stmt->bind_param("i", $user);
 $order_stmt->execute();
 $order_result = $order_stmt->get_result();
@@ -107,119 +118,131 @@ $sold_products_result = $sold_products_stmt->get_result();
     <div class="container mt-5">
         <button type="button" class="btn btn-warning backbtn" id="homeButton">Kembali</button>
         <h1 class="text-center judul">Laporan Produk</h1>
-        <div class="row mb-5">
-            <?php
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "<div class='col-md-4 mb-4'>";
-                    echo "<div class='card h-100'>";
-                    echo "<img src='" . $row['foto'] . "' class='card-img-top' alt='Product Image'>";
-                    echo "<div class='card-body'>";
-                    echo "<h5 class='card-title'>" . $row['namabarang'] . "</h5>";
-                    echo "<p class='card-text'>Kategori: " . $row['kategori'] . " (" . $row['jenis'] . ")</p>";
-                    echo "<p class='card-text'>Rp. " . number_format($row['harga'], 0, ',', '.') . "</p>";
-                    echo "<a href='edit.php?id=" . $row['id'] . "' class='btn btn-primary'>Edit</a> ";
-                    echo "<form method='POST' action='laporan.php' class='d-inline'>";
-                    echo "<input type='hidden' name='product_id' value='" . $row['id'] . "'>";
-                    echo "<button type='submit' name='delete_product' class='btn btn-danger'>Delete</button>";
-                    echo "</form>";
-                    echo "</div>";
-                    echo "</div>";
-                    echo "</div>";
+        
+        <!-- Container for Products -->
+        <div class="bg-white p-4 rounded shadow mb-5">
+            <h2 class="text-center judul">Daftar Produk</h2>
+            <div class="row mb-5">
+                <?php
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<div class='col-md-4 mb-4'>";
+                        echo "<div class='card h-100'>";
+                        echo "<img src='" . $row['foto'] . "' class='card-img-top' alt='Product Image'>";
+                        echo "<div class='card-body'>";
+                        echo "<h5 class='card-title'>" . $row['namabarang'] . "</h5>";
+                        echo "<p class='card-text'>Kategori: " . $row['kategori'] . " (" . $row['jenis'] . ")</p>";
+                        echo "<p class='card-text'>Rp. " . number_format($row['harga'], 0, ',', '.') . "</p>";
+                        echo "<a href='edit.php?id=" . $row['id'] . "' class='btn btn-primary'>Edit</a> ";
+                        echo "<form method='POST' action='laporan.php' class='d-inline'>";
+                        echo "<input type='hidden' name='product_id' value='" . $row['id'] . "'>";
+                        echo "<button type='submit' name='delete_product' class='btn btn-danger'>Delete</button>";
+                        echo "</form>";
+                        echo "</div>";
+                        echo "</div>";
+                        echo "</div>";
+                    }
+                } else {
+                    echo "<p class='text-center'>Tidak ada produk yang ditemukan.</p>";
                 }
-            } else {
-                echo "<p class='text-center'>Tidak ada produk yang ditemukan.</p>";
-            }
-            ?>
+                ?>
+            </div>
         </div>
 
-        <h2 class="text-center judul">Pesanan Masuk</h2>
-        <div class="row">
-            <?php
-            if ($order_result->num_rows > 0) {
-                while ($order = $order_result->fetch_assoc()) {
-                    echo "<div class='col-md-4 mb-4'>";
-                    echo "<div class='card h-100'>";
-                    echo "<div class='card-body'>";
-                    echo "<h5 class='card-title'>Pesanan untuk: " . $order['namabarang'] . "</h5>";
-                    echo "<p class='card-text'>Jumlah: " . $order['jumlah'] . "</p>";
-                    echo "<p class='card-text'>Nama Pembeli: " . $order['pembeli'] . "</p>";
-                    echo "<p class='card-text'>Alamat: " . $order['alamat'] . "</p>";
-                    echo "<p class='card-text'>Nomor HP: " . $order['nomor_hp'] . "</p>";
-                    echo "<p class='card-text'>Provinsi: " . $order['provinsi'] . "</p>";
-                    echo "<p class='card-text'>Waktu Pemesanan: " . $order['created_at'] . "</p>";
-                    echo "<form method='POST' action='laporan.php' class='d-inline'>";
-                    echo "<input type='hidden' name='product_id' value='" . $order['product_id'] . "'>";
-                    echo "<input type='hidden' name='seller_id' value='" . $order['seller_id'] . "'>";
-                    echo "<button type='submit' name='chat' class='btn btn-primary'>Chat</button>";
-                    echo "</form> ";
-                    echo "<form method='POST' action='laporan.php' class='d-inline'>";
-                    echo "<input type='hidden' name='order_id' value='" . $order['id'] . "'>";
-                    echo "<button type='submit' name='complete_order' class='btn btn-success'>Pesanan Selesai</button>";
-                    echo "</form>";
-                    echo "</div>";
-                    echo "</div>";
-                    echo "</div>";
+        <!-- Container for Incoming Orders -->
+        <div class="bg-white p-4 rounded shadow mb-5">
+            <h2 class="text-center judul">Pesanan Masuk</h2>
+            <div class="row">
+                <?php
+                if ($order_result->num_rows > 0) {
+                    while ($order = $order_result->fetch_assoc()) {
+                        echo "<div class='col-md-4 mb-4'>";
+                        echo "<div class='card h-100'>";
+                        echo "<div class='card-body'>";
+                        echo "<h5 class='card-title'>Pesanan untuk: " . $order['namabarang'] . "</h5>";
+                        echo "<p class='card-text'>Jumlah: " . $order['jumlah'] . "</p>";
+                        echo "<p class='card-text'>Nama Pembeli: " . $order['pembeli'] . "</p>";
+                        echo "<p class='card-text'>Alamat: " . $order['alamat'] . "</p>";
+                        echo "<p class='card-text'>Nomor HP: " . $order['nomor_hp'] . "</p>";
+                        echo "<p class='card-text'>Provinsi: " . $order['provinsi'] . "</p>";
+                        echo "<p class='card-text'>Waktu Pemesanan: " . $order['created_at'] . "</p>";
+                        echo "<form method='POST' action='laporan.php' class='d-inline'>";
+                        echo "<input type='hidden' name='product_id' value='" . $order['product_id'] . "'>";
+                        echo "<input type='hidden' name='seller_id' value='" . $order['seller_id'] . "'>";
+                        echo "<button type='submit' name='chat' class='btn btn-primary'>Chat</button>";
+                        echo "</form> ";
+                        echo "<form method='POST' action='laporan.php' class='d-inline'>";
+                        echo "<input type='hidden' name='order_id' value='" . $order['id'] . "'>";
+                        echo "<button type='submit' name='complete_order' class='btn btn-success'>Pesanan Selesai</button>";
+                        echo "</form>";
+                        echo "</div>";
+                        echo "</div>";
+                        echo "</div>";
+                    }
+                } else {
+                    echo "<p class='text-center'>Tidak ada pesanan yang masuk.</p>";
                 }
-            } else {
-                echo "<p class='text-center'>Tidak ada pesanan yang masuk.</p>";
-            }
-            ?>
+                ?>
+            </div>
         </div>
 
         <!-- Sales Chart -->
-        <h2 class="text-center judul">Grafik Penjualan Bulanan</h2>
-        <canvas id="salesChart"></canvas>
-        <script>
-            const ctx = document.getElementById('salesChart').getContext('2d');
-            const salesChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: <?php echo json_encode($months); ?>,
-                    datasets: [{
-                        label: 'Jumlah Orderan',
-                        data: <?php echo json_encode($order_counts); ?>,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
+        <div class="bg-white p-4 rounded shadow mb-5">
+            <h2 class="text-center judul">Grafik Penjualan Bulanan</h2>
+            <canvas id="salesChart"></canvas>
+            <script>
+                const ctx = document.getElementById('salesChart').getContext('2d');
+                const salesChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: <?php echo json_encode($months); ?>,
+                        datasets: [{
+                            label: 'Jumlah Orderan',
+                            data: <?php echo json_encode($order_counts); ?>,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
                         }
                     }
-                }
-            });
-        </script>
+                });
+            </script>
+        </div>
 
         <!-- Sold Products and Profits Table -->
-        <h2 class="text-center judul">Produk Terjual dan Keuntungan</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Nama Produk</th>
-                    <th>Total Terjual</th>
-                    <th>Total Keuntungan (Rp)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                if ($sold_products_result->num_rows > 0) {
-                    while ($product = $sold_products_result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . $product['namabarang'] . "</td>";
-                        echo "<td>" . $product['total_sold'] . "</td>";
-                        echo "<td>" . number_format($product['total_profit'], 0, ',', '.') . "</td>";
-                        echo "</tr>";
+        <div class="bg-white p-4 rounded shadow mb-5">
+            <h2 class="text-center judul">Produk Terjual dan Keuntungan</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nama Produk</th>
+                        <th>Total Terjual</th>
+                        <th>Total Keuntungan (Rp)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($sold_products_result->num_rows > 0) {
+                        while ($product = $sold_products_result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $product['namabarang'] . "</td>";
+                            echo "<td>" . $product['total_sold'] . "</td>";
+                            echo "<td>" . number_format($product['total_profit'], 0, ',', '.') . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='3' class='text-center'>Tidak ada produk terjual.</td></tr>";
                     }
-                } else {
-                    echo "<tr><td colspan='3' class='text-center'>Tidak ada produk terjual.</td></tr>";
-                }
-                ?>
-            </tbody>
-        </table>
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
