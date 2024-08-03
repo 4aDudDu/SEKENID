@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_product'])) {
     $harga = $_POST['harga'];
     $kategori = $_POST['kategori'];
     $jenis = $_POST['jenis'];
-    $qty = $_POST['qty'];  // Add this line to capture qty
+    $qty = $_POST['qty']; 
     $foto = $_FILES['foto']['name'];
     $target_dir = "uploads/";
     $target_file = $target_dir . basename($foto);

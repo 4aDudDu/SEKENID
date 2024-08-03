@@ -165,19 +165,16 @@ if ($selected_category) {
                     echo "<img src='" . $row['foto'] . "' alt='Product Image' />";
                     echo "</div>";
                     echo "<div class='card-info'>";
-
                     if (isset($row['namabarang'])) {
                         echo "<p class='text-title'>" . $row['namabarang'] . "</p>";
                     } else {
                         echo "<p class='text-title'>No Name Available</p>";
                     }
-
                     if (isset($row['kategori']) && isset($row['jenis'])) {
                         echo "<p class='text-body'>Kategori: " . $row['kategori'] . " (" . $row['jenis'] . ")</p>";
                     } else {
                         echo "<p class='text-body'>No Category or Type Available</p>";
                     }
-
                     echo "</div>";
                     echo "<div class='card-footer'>";
                     echo "<span class='text-title'>Rp. " . number_format($row['harga'], 0, ',', '.') . "</span>";
