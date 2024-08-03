@@ -8,9 +8,9 @@ body {
 }
 
 .backbtn {
-  left: 10px;
-  top: 10px;
-  padding: 10px;
+    left: 10px;
+    top: 10px;
+    padding: 10px;
 }
 
 .chat-container {
@@ -18,7 +18,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     max-width: 600px;
-    margin: 50px auto;
+    margin: 0 auto;
     height: 80vh;
     background: #fff;
     border-radius: 8px;
@@ -136,42 +136,21 @@ form input[type="text"]:focus, form button:focus {
     font-size: 0.875rem;
 }
 
-/* button {
-  padding: 30px 50px;
-  border: unset;
-  border-radius: 15px;
-  color: #212121;
-  z-index: 1;
-  background: #e8e8e8;
-  position: relative;
-  font-weight: 1000;
-  font-size: 17px;
-  -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  transition: all 250ms;
-  overflow: hidden;
- }
- 
- button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 0;
-  border-radius: 15px;
-  background-color: #212121;
-  border-radius: 15px;
-  z-index: -1;
-  -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  transition: all 250ms
- }
- 
- button:hover {
-  color: #e8e8e8;
- }
- 
- button:hover::before {
-  width: 100%;
- } */
+/* Additional Styles for Enhancing UI */
+.chat-container.card {
+    background-color: #f8f9fa;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.chat-container .chat-box {
+    border-bottom: none;
+}
+
+.chat-container .card-footer {
+    padding: 10px;
+}
+
+form input[type="text"] {
+    margin-right: 10px;
+}
