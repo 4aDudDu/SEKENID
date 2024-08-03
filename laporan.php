@@ -59,6 +59,38 @@ WHERE p.seller_id = ?");
 $order_stmt->bind_param("i", $user);
 $order_stmt->execute();
 $order_result = $order_stmt->get_result();
+
+// Query to get monthly order quantities
+$monthly_order_stmt = $conn->prepare("
+    SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COUNT(*) AS order_count 
+    FROM orders 
+    WHERE seller_id = ? 
+    GROUP BY month 
+    ORDER BY month
+");
+$monthly_order_stmt->bind_param("i", $user);
+$monthly_order_stmt->execute();
+$monthly_order_result = $monthly_order_stmt->get_result();
+
+// Prepare data for Chart.js
+$months = [];
+$order_counts = [];
+while ($row = $monthly_order_result->fetch_assoc()) {
+    $months[] = $row['month'];
+    $order_counts[] = $row['order_count'];
+}
+
+// Query to get sold products and their profits
+$sold_products_stmt = $conn->prepare("
+    SELECT p.namabarang, SUM(o.jumlah) AS total_sold, SUM(o.jumlah * p.harga) AS total_profit
+    FROM orders o
+    JOIN produk p ON o.product_id = p.id
+    WHERE p.seller_id = ?
+    GROUP BY p.namabarang
+");
+$sold_products_stmt->bind_param("i", $user);
+$sold_products_stmt->execute();
+$sold_products_result = $sold_products_stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -69,9 +101,9 @@ $order_result = $order_stmt->get_result();
     <title>Laporan Produk</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="laporan.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    
     <div class="container mt-5">
         <button type="button" class="btn btn-warning backbtn" id="homeButton">Kembali</button>
         <h1 class="text-center judul">Laporan Produk</h1>
@@ -134,7 +166,62 @@ $order_result = $order_stmt->get_result();
             }
             ?>
         </div>
+
+        <!-- Sales Chart -->
+        <h2 class="text-center judul">Grafik Penjualan Bulanan</h2>
+        <canvas id="salesChart"></canvas>
+        <script>
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            const salesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: <?php echo json_encode($months); ?>,
+                    datasets: [{
+                        label: 'Jumlah Orderan',
+                        data: <?php echo json_encode($order_counts); ?>,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+
+        <!-- Sold Products and Profits Table -->
+        <h2 class="text-center judul">Produk Terjual dan Keuntungan</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nama Produk</th>
+                    <th>Total Terjual</th>
+                    <th>Total Keuntungan (Rp)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if ($sold_products_result->num_rows > 0) {
+                    while ($product = $sold_products_result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $product['namabarang'] . "</td>";
+                        echo "<td>" . $product['total_sold'] . "</td>";
+                        echo "<td>" . number_format($product['total_profit'], 0, ',', '.') . "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='3' class='text-center'>Tidak ada produk terjual.</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
     </div>
+
     <script>
         document.getElementById("homeButton").addEventListener("click", function () {
             window.location.href = "index.php";
